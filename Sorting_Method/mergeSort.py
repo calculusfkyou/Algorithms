@@ -1,39 +1,77 @@
-def merge_sort(arr):
-    if len(arr) <= 1:
-        return arr
+# v1
+# def merge_sort(arr):
+#     if len(arr) <= 1:
+#         return arr
+#
+#     mid = len(arr) // 2
+#     left_half = arr[:mid]
+#     right_half = arr[mid:]
+#
+#     left_half = merge_sort(left_half)
+#     right_half = merge_sort(right_half)
+#
+#     return merge(left_half, right_half)
+#
+#
+# def merge(left, right):
+#     result = []
+#     i = j = 0
+#
+#     while i < len(left) and j < len(right):
+#         if left[i] < right[j]:
+#             result.append(left[i])
+#             i += 1
+#         else:
+#             result.append(right[j])
+#             j += 1
+#
+#     result.extend(left[i:])
+#     result.extend(right[j:])
+#     return result
+#
+#
+# if __name__ == "__main__":
+#     n = int(input())
+#     arr = list(map(int, input().split()))
+#     sorted_arr = merge_sort(arr)
+#     print(*sorted_arr)
 
-    mid = len(arr) // 2
-    left_half = arr[:mid]
-    right_half = arr[mid:]
+# v2
+def merge_sort(arr, p, r):
+    if p < r:
+        q = (p + r) // 2
+        merge_sort(arr, p, q)
+        merge_sort(arr, q + 1, r)
+        merge(arr, p, q, r)
 
-    left_half = merge_sort(left_half)
-    right_half = merge_sort(right_half)
 
-    return merge(left_half, right_half)
-
-
-def merge(left, right):
-    result = []
+# q = mid, p = right, r = left
+def merge(arr, p, q, r):
+    n1 = q - p + 1
+    n2 = r - q
+    L = [0] * (n1 + 1)
+    R = [0] * (n2 + 1)
+    for i in range(n1):
+        L[i] = arr[p + i]
+    for j in range(n2):
+        R[j] = arr[q + j + 1]
+    L[n1] = float('inf')
+    R[n2] = float('inf')
     i = j = 0
-
-    while i < len(left) and j < len(right):
-        if left[i] < right[j]:
-            result.append(left[i])
+    for k in range(p, r + 1):
+        if L[i] <= R[j]:
+            arr[k] = L[i]
             i += 1
         else:
-            result.append(right[j])
+            arr[k] = R[j]
             j += 1
-
-    result.extend(left[i:])
-    result.extend(right[j:])
-    return result
 
 
 if __name__ == "__main__":
     n = int(input())
     arr = list(map(int, input().split()))
-    sorted_arr = merge_sort(arr)
-    print(*sorted_arr)
+    merge_sort(arr, 0, n - 1)
+    print(*arr)
 
 # Sample Input 1
 # 20
